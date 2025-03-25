@@ -1,0 +1,127 @@
+{
+  "users": [
+    {
+      "username": "Admin1",
+      "email": "admin@mail.ru",
+      "password": "Admin123@",
+      "img": "https://cdn0.iconfinder.com/data/icons/man-user-human-profile-avatar-business-person/100/09B-1User-512.png",
+      "id": "28cb",
+      "blocked": false
+    },
+    {
+      "username": "user12222",
+      "email": "samvaaael1973@seznam.cz",
+      "password": "",
+      "id": "bcaa",
+      "blocked": false
+    },
+    {
+      "id": "a979",
+      "username": "user13",
+      "email": "saascascmvel1973@seznam.cz",
+      "password": "User123@"
+    },
+    {
+      "id": "218f",
+      "username": "user134",
+      "email": "samvel1973@seznam.cz",
+      "password": "Admin123@"
+    },
+    {
+      "id": "2350",
+      "username": "Edgar123456",
+      "email": "samavel1973@seznam.cz",
+      "password": "Edgar123456!"
+    }
+  ],
+  "products": [
+    {
+      "id": "dc20",
+      "name": "MSI Katana 15 B13VFK-1868XCZ",
+      "price": "1252.191"
+    },
+    {
+      "id": "dd21",
+      "name": "Lenovo V15 G4 83A100BDCK",
+      "price": "645.191"
+    },
+    {
+      "id": "dd29",
+      "name": "Acer Aspire 5 15 A515-48M-R1EY Gray",
+      "price": "804.21"
+    },
+    {
+      "id": "dt78",
+      "name": "MSI Gaming Mouse",
+      "price": "215.98"
+    }
+  ],
+  "inventory": [
+    {
+      "id": "8125",
+      "itemName": "gfn",
+      "quantity": 5656
+    },
+    {
+      "id": "3649",
+      "itemName": "rtthrh",
+      "quantity": 546
+    }
+  ],
+  "course": [],
+  "book": [],
+  "football-data": [
+    {
+      "id": "1",
+      "name": "FC Barcelona",
+      "league": "La Liga",
+      "coach": "Xavi Hernandez",
+      "players": [
+        "Lewandowski",
+        "Pedri",
+        "Gavi"
+      ],
+      "matchTime": "2025-03-10 18:30",
+      "image": "https://upload.wikimedia.org/wikipedia/en/4/47/FC_Barcelona_%28crest%29.svg"
+    },
+    {
+      "id": "2",
+      "name": "Manchester City",
+      "league": "Premier League",
+      "coach": "Pep Guardiola",
+      "players": [
+        "Haaland",
+        "De Bruyne",
+        "Foden"
+      ],
+      "matchTime": "2025-03-12 20:00",
+      "image": "https://upload.wikimedia.org/wikipedia/en/e/eb/Manchester_City_FC_badge.svg"
+    },
+    {
+      "id": "3",
+      "name": "Real Madrid",
+      "league": "La Liga",
+      "coach": "Carlo Ancelotti",
+      "players": [
+        "Vinícius Jr.",
+        "Bellingham",
+        "Modrić"
+      ],
+      "matchTime": "2025-03-15 19:00",
+      "image": "https://upload.wikimedia.org/wikipedia/en/5/56/Real_Madrid_CF.svg"
+    },
+    {
+      "id": "4",
+      "name": "Bayern Munich",
+      "league": "Bundesliga",
+      "coach": "Thomas Tuchel",
+      "players": [
+        "Kane",
+        "Kimmich",
+        "Müller"
+      ],
+      "matchTime": "2025-03-18 21:00",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Logo_FC_Bayern_M%C3%BCnchen_%282002%E2%80%932017%29.svg"
+    }
+  ]
+}
