@@ -55,6 +55,7 @@ const Footer = () => {
                 </div>
 
                 <div className="mt-4 flex space-x-6 text-gray-400">
+                    {/*this is my comment*/}
 
                     <Link
                         className="hover:text-blue-500 transition"
