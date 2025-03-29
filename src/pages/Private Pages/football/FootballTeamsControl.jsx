@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
-import {useNavigate} from "react-router-dom"; // Updated to useNavigate from useHistory
+import {useNavigate} from "react-router-dom";
 
 const FootballTeamsControl = () => {
     const [teams, setTeams] = useState([]);
@@ -14,7 +14,7 @@ const FootballTeamsControl = () => {
         image: "",
     });
 
-    const navigate = useNavigate(); // Use navigate instead of history
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchTeams = async () => {
@@ -37,11 +37,10 @@ const FootballTeamsControl = () => {
             return;
         }
 
-
         try {
             const response = await axios.post("http://localhost:4000/football-data", newTeam);
             setTeams([...teams, response.data]);
-            setNewTeam({name: "", league: "", image: ""}); // Clear form
+            setNewTeam({name: "", league: "", image: ""});
         } catch (error) {
             alert("Failed to add team" + error);
         }
@@ -50,25 +49,22 @@ const FootballTeamsControl = () => {
     const handleDeleteTeam = async (id) => {
         try {
             await axios.delete(`http://localhost:4000/football-data/${id}`);
-            setTeams(teams.filter((team) => team.id !== id)); // Remove the deleted team
+            setTeams(teams.filter((team) => team.id !== id));
         } catch (error) {
             alert("Failed to delete team" + error);
         }
     };
 
-
     const handleSaveTeams = async (editTeamId) => {
         try {
-
             await axios.put(`http://localhost:4000/football-data/${editTeamId}`, newTeam);
-
         } catch (error) {
             setError("Failed to update team info" + error);
         }
     };
 
     const handleViewTeam = (id) => {
-        navigate(`/footballdata/${id}`); // Changed to use navigate instead of history.push
+        navigate(`/footballdata/${id}`);
     };
 
     const handleEditTeam = (team) => {
@@ -76,34 +72,37 @@ const FootballTeamsControl = () => {
         setNewTeam(team);
     };
 
-    if (loading) return <p className="text-center text-xl">Loading teams...</p>;
-    if (error) return <p className="text-center text-red-500">{error}</p>;
+    if (loading) return <p className="text-center text-xl dark:text-white">Loading teams...</p>;
+    if (error) return <p className="text-center text-red-500 dark:text-red-400">{error}</p>;
 
     return (
-        <div className="max-w-6xl mx-auto p-8 bg-gray-100 rounded-xl shadow-lg">
-            <h2 className="text-4xl font-semibold text-center mb-8 text-blue-600">Football Teams</h2>
+        <div className="max-w-6xl mx-auto p-8 bg-gray-100 dark:bg-gray-800 rounded-xl shadow-lg">
+            <h2 className="text-4xl font-semibold text-center mb-8 text-blue-600 dark:text-blue-400">
+                Football Teams
+            </h2>
 
-            {/* Add New Team Section */}
-            <div className="mb-8 p-6 bg-white rounded-xl shadow-md text-black">
-                <h3 className="text-2xl font-semibold text-center mb-6">Add New Team</h3>
+            <div className="mb-8 p-6 bg-white dark:bg-gray-700 rounded-xl shadow-md">
+                <h3 className="text-2xl font-semibold text-center mb-6 text-gray-800 dark:text-white">
+                    Add New Team
+                </h3>
                 <div className="flex flex-col md:flex-row gap-4">
                     <input
                         type="text"
-                        className="border p-3 rounded-md w-full md:w-1/3 text-lg"
+                        className="border border-gray-300 p-3 rounded-md w-full md:w-1/3 text-lg bg-white dark:bg-gray-600 text-gray-800 dark:text-white"
                         placeholder="Team Name"
                         value={newTeam.name}
                         onChange={(e) => setNewTeam({...newTeam, name: e.target.value})}
                     />
                     <input
                         type="text"
-                        className="border p-3 rounded-md w-full md:w-1/3 text-lg"
+                        className="border border-gray-300 p-3 rounded-md w-full md:w-1/3 text-lg bg-white dark:bg-gray-600 text-gray-800 dark:text-white"
                         placeholder="League"
                         value={newTeam.league}
                         onChange={(e) => setNewTeam({...newTeam, league: e.target.value})}
                     />
                     <input
                         type="text"
-                        className="border p-3 rounded-md w-full md:w-1/3 text-lg"
+                        className="border border-gray-300 p-3 rounded-md w-full md:w-1/3 text-lg bg-white dark:bg-gray-600 text-gray-800 dark:text-white"
                         placeholder="Logo URL"
                         value={newTeam.image}
                         onChange={(e) => setNewTeam({...newTeam, image: e.target.value})}
@@ -115,7 +114,6 @@ const FootballTeamsControl = () => {
                         if (addTeam === "Add Team") {
                             handleAddTeam();
                         } else if (addTeam === "Save") {
-                            console.log(newTeam);
                             handleSaveTeams(editTeamId);
                         }
                     }}
@@ -126,7 +124,7 @@ const FootballTeamsControl = () => {
 
             {/* Teams List Table */}
             <div className="overflow-x-auto">
-                <table className="min-w-full bg-white rounded-lg shadow-md">
+                <table className="min-w-full bg-white dark:bg-gray-700 rounded-lg shadow-md">
                     <thead className="bg-gradient-to-r from-blue-500 to-red-500 text-white">
                     <tr>
                         <th className="py-4 px-6">Logo</th>
@@ -139,7 +137,7 @@ const FootballTeamsControl = () => {
                     {teams.map((team) => (
                         <tr
                             key={team.id}
-                            className="border-b hover:bg-gray-100 transition-all duration-300 text-black"
+                            className="border-b hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 text-black dark:text-white"
                         >
                             <td className="py-3 px-6">
                                 <img
@@ -159,10 +157,11 @@ const FootballTeamsControl = () => {
                                 </button>
                                 <button
                                     className="bg-yellow-500 text-white px-5 py-2 rounded-lg hover:bg-yellow-600 transition-all duration-300"
-                                    onClick={ ()=>{
+                                    onClick={() => {
                                         setEditTeamId(team.id);
                                         console.log(editTeamId)
-                                        handleEditTeam(team)}}
+                                        handleEditTeam(team)
+                                    }}
                                 >
                                     Edit
                                 </button>

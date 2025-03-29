@@ -28,7 +28,7 @@ const AdminSettings = () => {
     const handleNotificationsToggle = () => setNotifications(!notifications);
 
     return (
-        <div className="w-full p-6 min-h-screen">
+        <div className="w-full p-6 min-h-screen text-black dark:text-white">
             <h1 className="text-2xl font-bold mb-4">Admin Settings</h1>
 
             {/* Theme Settings */}

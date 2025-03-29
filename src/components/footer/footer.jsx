@@ -1,26 +1,21 @@
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Facebook, Instagram, Twitter, Youtube, Mail, Phone } from "lucide-react";
+import {Facebook, Instagram, Twitter, Youtube, Mail, Phone } from "lucide-react";
 import {Link} from "react-router-dom";
 import {ABOUT_PAGE, CONTACT_PAGE, PRIVACY_POLICY_PAGE} from "../../utils/routes.jsx";
 
 const Footer = () => {
-    const [isOpen, setIsOpen] = useState(false);
+
 
     return (
         <div className="w-full bg-gray-900 text-white relative">
 
-            <div
-                className={`absolute left-1/2 transform -translate-x-1/2 -top-12 bg-gray-800 p-3 rounded-full cursor-pointer w-[47px] h-[47]
-        hover:bg-gray-700 transition-all duration-300 ${isOpen ? "rotate-180" : "rotate-0"}`}
-                onClick={() => setIsOpen(!isOpen)}
-            >
-                {isOpen ? <ChevronUp size={23} /> : <ChevronDown size={23} />}
-            </div>
+
 
 
             <div
-                className={`overflow-hidden transition-all duration-500 ease-in-out ${isOpen ? "max-h-[300px] opacity-100 py-6" : "max-h-0 opacity-0"
-                } flex flex-col items-center`}
+                className={` max-h-[700px] w-full
+                    opacity-100 py-6 gap-6
+                 flex flex-wrap items-center justify-center`}
             >
 
                 <p className="text-red-500 text-xl font-extrabold animate-pulse">

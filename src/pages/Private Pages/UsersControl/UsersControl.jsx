@@ -2,59 +2,82 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const UsersControl = () => {
-    const [users, setUsers] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
-    const [editUserId, setEditUserId] = useState(null);
-    const [editedUser, setEditedUser] = useState({ username: '', email: '' });
+    const [state, setState] = useState({
+        users: [],
+        loading: true,
+        error: '',
+        editUserId: null,
+        editedUser: { username: '', email: '' }
+    });
 
-    const blockUsers = async (id) => {
+    const handleApiCall = async (method, url, data = null) => {
         try {
-            const userToBlock = users.find((user) => user.id === id);
-            if (!userToBlock) return;
-
-            const updatedUser = { ...userToBlock, blocked: !userToBlock.blocked };
-            await axios.put(`http://localhost:4000/users/${id}`, updatedUser);
-
-            setUsers(users.map(user => user.id === id ? updatedUser : user));
+            const config = { method, url };
+            if (data) config.data = data;
+            return await axios(config);
         } catch (error) {
-            setError("Failed to Block Users");
+            throw error;
         }
     };
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get("http://localhost:4000/users");
-            setUsers(response.data);
+            const response = await handleApiCall('get', "http://localhost:4000/users");
+            setState(prev => ({ ...prev, users: response.data, loading: false }));
         } catch (err) {
-            setError('Failed to fetch users: ' + err.message);
-        } finally {
-            setLoading(false);
+            setState(prev => ({ ...prev, error: 'Failed to fetch users: ' + err.message, loading: false }));
+        }
+    };
+
+    const blockUsers = async (id) => {
+        try {
+            const userToBlock = state.users.find(user => user.id === id);
+            if (!userToBlock) return;
+
+            const updatedUser = { ...userToBlock, blocked: !userToBlock.blocked };
+            await handleApiCall('put', `http://localhost:4000/users/${id}`, updatedUser);
+
+            setState(prev => ({
+                ...prev,
+                users: prev.users.map(user => user.id === id ? updatedUser : user)
+            }));
+        } catch (error) {
+            setState(prev => ({ ...prev, error: "Failed to Block Users" }));
         }
     };
 
     const deleteUser = async (userId) => {
         try {
-            await axios.delete(`http://localhost:4000/users/${userId}`);
-            setUsers(users.filter(user => user.id !== userId));
+            await handleApiCall('delete', `http://localhost:4000/users/${userId}`);
+            setState(prev => ({
+                ...prev,
+                users: prev.users.filter(user => user.id !== userId)
+            }));
         } catch (err) {
-            setError('Failed to delete user: ' + err.message);
+            setState(prev => ({ ...prev, error: 'Failed to delete user: ' + err.message }));
         }
     };
 
     const handleEditChange = (e) => {
-        setEditedUser({ ...editedUser, [e.target.name]: e.target.value });
+        setState(prev => ({
+            ...prev,
+            editedUser: { ...prev.editedUser, [e.target.name]: e.target.value }
+        }));
     };
 
     const saveUserChanges = async () => {
         try {
-            const updatedUser = { ...editedUser };
-            await axios.put(`http://localhost:4000/users/${editUserId}`, updatedUser);
-            setUsers(users.map(user => user.id === editUserId ? { ...user, ...updatedUser } : user));
-            setEditUserId(null);
-            setEditedUser({ username: '', email: '' });
+            const updatedUser = { ...state.editedUser };
+            await handleApiCall('put', `http://localhost:4000/users/${state.editUserId}`, updatedUser);
+
+            setState(prev => ({
+                ...prev,
+                users: prev.users.map(user => user.id === prev.editUserId ? { ...user, ...updatedUser } : user),
+                editUserId: null,
+                editedUser: { username: '', email: '' }
+            }));
         } catch (error) {
-            setError("Failed to update user info");
+            setState(prev => ({ ...prev, error: "Failed to update user info" }));
         }
     };
 
@@ -62,50 +85,64 @@ const UsersControl = () => {
         fetchUsers();
     }, []);
 
+    const { users, loading, error, editUserId, editedUser } = state;
+
     return (
-        <div className="w-full p-6 bg-gray-50 min-h-screen">
-            <h1 className="text-3xl font-semibold mb-6 text-center text-gray-800">User Management</h1>
-            {users.length === 0 ? (
+        <div className="w-full p-6 min-h-screen bg-white dark:bg-gray-800">
+            <h1 className="text-3xl font-semibold mb-6 text-center text-gray-800 dark:text-white">
+                User Management
+            </h1>
+
+            {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+            {loading && <p className="text-center">Loading...</p>}
+
+            {!loading && users.length === 0 ? (
                 <p className="text-center text-gray-500">No users available.</p>
             ) : (
-                <div className="overflow-x-auto shadow-lg rounded-lg bg-white">
+                <div className="overflow-x-auto shadow-lg rounded-lg bg-white dark:bg-gray-700">
                     <table className="w-full table-auto border-collapse border border-gray-300">
                         <thead className="bg-gradient-to-r from-blue-500 to-teal-500">
                         <tr>
-                            <th className="border border-gray-300 p-4 text-white">ID</th>
-                            <th className="border border-gray-300 p-4 text-white">Username</th>
-                            <th className="border border-gray-300 p-4 text-white">Email</th>
-                            <th className="border border-gray-300 p-4 text-white">Blocked</th>
-                            <th className="border border-gray-300 p-4 text-white">Controls</th>
+                            {['ID', 'Username', 'Email', 'Blocked', 'Controls'].map((header) => (
+                                <th key={header} className="border border-gray-300 p-4 text-white">
+                                    {header}
+                                </th>
+                            ))}
                         </tr>
                         </thead>
                         <tbody>
                         {users.map((user) => (
-                            <tr key={user.id} className="odd:bg-white even:bg-gray-100 hover:bg-gray-200">
-                                <td className="border border-gray-300 p-4 text-gray-700">{user.id}</td>
-                                <td className="border border-gray-300 p-4 text-gray-700">{user.username}</td>
-                                <td className="border border-gray-300 p-4 text-gray-700">{user.email}</td>
-                                <td className="border border-gray-300 p-4 text-gray-700">{user.blocked ? "Yes" : "No"}</td>
-                                <td className="border border-gray-300 p-4 text-gray-700">
+                            <tr key={user.id} className="odd:bg-white even:bg-gray-100 hover:bg-gray-200 dark:odd:bg-gray-600 dark:even:bg-gray-700 dark:hover:bg-gray-600">
+                                {['id', 'username', 'email'].map((field) => (
+                                    <td key={field} className="border border-gray-300 p-4 text-gray-700 dark:text-gray-200">
+                                        {user[field]}
+                                    </td>
+                                ))}
+                                <td className="border border-gray-300 p-4 text-gray-700 dark:text-gray-200">
+                                    {user.blocked ? "Yes" : "No"}
+                                </td>
+                                <td className="border border-gray-300 p-4 text-gray-700 dark:text-gray-200 space-x-2">
                                     <button
                                         onClick={() => deleteUser(user.id)}
-                                        className="border border-gray-600 text-gray-800 p-1 rounded-3xl hover:shadow-xl hover:bg-red-600"
+                                        className="border border-black text-gray-800 dark:text-white p-1 rounded-3xl hover:shadow-xl hover:bg-red-600 hover:text-white"
                                     >
-                                        Remove User
+                                        Remove
                                     </button>
                                     <button
                                         onClick={() => blockUsers(user.id)}
-                                        className="ml-2 border border-gray-600 text-gray-800 p-1 rounded-3xl hover:shadow-xl hover:bg-red-600">
-                                        {user.blocked ? "Unblock User" : "Block User"}
+                                        className="border border-black text-gray-800 dark:text-white p-1 rounded-3xl hover:shadow-xl hover:bg-red-600 hover:text-white"
+                                    >
+                                        {user.blocked ? "Unblock" : "Block"}
                                     </button>
                                     <button
-                                        onClick={() => {
-                                            setEditUserId(user.id);
-                                            setEditedUser({ username: user.username, email: user.email });
-                                        }}
-                                        className="ml-2 border border-gray-600 text-gray-800 p-1 rounded-3xl hover:shadow-xl hover:bg-blue-600"
+                                        onClick={() => setState(prev => ({
+                                            ...prev,
+                                            editUserId: user.id,
+                                            editedUser: { username: user.username, email: user.email }
+                                        }))}
+                                        className="border border-black text-gray-800 dark:text-white p-1 rounded-3xl hover:shadow-xl hover:bg-blue-600 hover:text-white"
                                     >
-                                        Edit User
+                                        Edit
                                     </button>
                                 </td>
                             </tr>
@@ -116,40 +153,34 @@ const UsersControl = () => {
             )}
 
             {editUserId && (
-                <div className="mt-6 bg-white p-4 shadow-lg rounded-lg">
-                    <h2 className="text-2xl font-semibold mb-4">Edit User</h2>
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Username</label>
-                        <input
-                            type="text"
-                            name="username"
-                            value={editedUser.username}
-                            onChange={handleEditChange}
-                            className="w-full p-2 border border-gray-300 rounded-lg"
-                        />
+                <div className="mt-6 bg-white dark:bg-gray-700 p-4 shadow-lg rounded-lg">
+                    <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Edit User</h2>
+                    {['username', 'email'].map((field) => (
+                        <div key={field} className="mb-4">
+                            <label className="block text-gray-700 dark:text-gray-300 capitalize">{field}</label>
+                            <input
+                                type={field === 'email' ? 'email' : 'text'}
+                                name={field}
+                                value={editedUser[field]}
+                                onChange={handleEditChange}
+                                className="w-full p-2 border border-gray-300 rounded-lg dark:bg-gray-600 dark:text-white"
+                            />
+                        </div>
+                    ))}
+                    <div className="flex space-x-2">
+                        <button
+                            onClick={saveUserChanges}
+                            className="bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
+                        >
+                            Save Changes
+                        </button>
+                        <button
+                            onClick={() => setState(prev => ({ ...prev, editUserId: null }))}
+                            className="bg-gray-500 text-white p-2 rounded-lg hover:bg-gray-600"
+                        >
+                            Cancel
+                        </button>
                     </div>
-                    <div className="mb-4">
-                        <label className="block text-gray-700">Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={editedUser.email}
-                            onChange={handleEditChange}
-                            className="w-full p-2 border border-gray-300 rounded-lg"
-                        />
-                    </div>
-                    <button
-                        onClick={saveUserChanges}
-                        className="bg-blue-500 text-white p-2 rounded-lg"
-                    >
-                        Save Changes
-                    </button>
-                    <button
-                        onClick={() => setEditUserId(null)}
-                        className="ml-2 bg-gray-500 text-white p-2 rounded-lg"
-                    >
-                        Cancel
-                    </button>
                 </div>
             )}
         </div>
