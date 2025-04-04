@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRoutes } from "react-router-dom";
 import { privateRoutes, publicRoutes } from "../utils/routes.jsx";
+import VerticalSidebar from "../components/header/Navbar.jsx";
 
 const Pages = () => {
     const [token, setToken] = useState(localStorage.getItem("token"));
@@ -20,8 +21,12 @@ const Pages = () => {
     const routes = useRoutes(token ? privateRoutes : publicRoutes);
 
     return (
-        <div className="w-full min-h-[80vh] bg-white dark:bg-gray-950 text-white">
+        <div className="w-full min-h-[80vh] bg-white dark:bg-gray-950 text-white relative">
             {routes}
+
+            <VerticalSidebar
+
+            />
         </div>
     );
 };

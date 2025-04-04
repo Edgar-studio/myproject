@@ -2,36 +2,48 @@
   "users": [
     {
       "username": "Admin1",
-      "email": "admin@mail.ru",
-      "password": "Admin123@",
+      "email": "edgaravakimyan7@gmail.com",
+      "password": "edgar123@",
       "img": "https://cdn0.iconfinder.com/data/icons/man-user-human-profile-avatar-business-person/100/09B-1User-512.png",
       "id": "28cb",
-      "blocked": false
+      "blocked": false,
+      "verification": true
     },
     {
       "username": "user12222",
       "email": "samvaaael1973@seznam.cz",
       "password": "",
       "id": "bcaa",
-      "blocked": false
+      "blocked": false,
+      "verification": false
     },
     {
       "id": "a979",
       "username": "user13",
       "email": "saascascmvel1973@seznam.cz",
-      "password": "User123@"
+      "password": "User123@",
+      "verification": false
     },
     {
       "id": "218f",
       "username": "user134",
       "email": "samvel1973@seznam.cz",
-      "password": "Admin123@"
+      "password": "Admin123@",
+      "verification": false
     },
     {
       "id": "2350",
       "username": "Edgar123456",
       "email": "samavel1973@seznam.cz",
-      "password": "Edgar123456!"
+      "password": "Edgar123456!",
+      "verification": false
+    },
+    {
+      "id": "e6d6",
+      "username": "Admin1234",
+      "email": "g_rubenyan@mail.ru",
+      "password": "Admin123@",
+      "verification": false
     }
   ],
   "products": [

@@ -11,10 +11,10 @@ export const loginUser = createAsyncThunk(
             const users = response.data;
             const user = users.find(user => user.email === email && user.password === password);
             localStorage.setItem("token", user.username);
-            notify("Successfully logged in", "green");
-            setTimeout(() => {
+
+
                 window.location.reload();
-            }, 1000);
+
             if (user) {
                 if (rememberMe) {
                     localStorage.setItem("rememberMe", JSON.stringify(user));

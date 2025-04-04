@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import {notify} from "../../../utils/notify.js";
 
 const FootballTeamsControl = () => {
     const [teams, setTeams] = useState([]);
@@ -33,7 +34,7 @@ const FootballTeamsControl = () => {
 
     const handleAddTeam = async () => {
         if (!newTeam.name || !newTeam.league || !newTeam.image) {
-            alert("Please fill in all fields");
+            notify("Please fill in all fields", 'yellow');
             return;
         }
 
@@ -42,7 +43,7 @@ const FootballTeamsControl = () => {
             setTeams([...teams, response.data]);
             setNewTeam({name: "", league: "", image: ""});
         } catch (error) {
-            alert("Failed to add team" + error);
+            notify("Failed to add team" + error, 'red');
         }
     };
 
@@ -51,7 +52,7 @@ const FootballTeamsControl = () => {
             await axios.delete(`http://localhost:4000/football-data/${id}`);
             setTeams(teams.filter((team) => team.id !== id));
         } catch (error) {
-            alert("Failed to delete team" + error);
+            notify("Failed to delete team" + error, 'red');
         }
     };
 

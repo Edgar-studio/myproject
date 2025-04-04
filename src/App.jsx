@@ -2,6 +2,7 @@
 import Header from "./components/header/header.jsx";
 import Pages from "./pages/Pages.jsx";
 import Footer from "./components/footer/footer.jsx";
+import VerticalSidebar from "./components/header/Navbar.jsx";
 
 
 
@@ -14,6 +15,7 @@ function App() {
                 {/*this is my comment*/}
                 {token && <Header/>}
                 <Pages/>
+
                 {token && <Footer/>}
             </div>
 
